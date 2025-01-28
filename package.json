@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@shadcn/ui": "^0.0.4",
+    "@types/chrome": "^0.0.299",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "shadcn-ui": "^0.9.4"
+  }
+}

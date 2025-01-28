@@ -1,0 +1,6 @@
+flask
+flask-cors
+whisper
+openai
+langchain
+pinecone-client
