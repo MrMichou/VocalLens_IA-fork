@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>VocalLens-AI</title>
-  <style>
-    body { width: 300px; padding: 10px; }
-    button { margin: 5px; padding: 5px 10px; }
-    .recording { background: red; }
-    #transcript, #answers { margin-top: 10px; }
-  </style>
+  <meta charset="UTF-8">
+  <title>VocalLens AI</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <button id="recordButton">Start Recording</button>
-  <div id="transcript"></div>
-  
-  <div>
-    <input type="text" id="question" placeholder="Ask a question...">
-    <button id="askButton">Ask</button>
-  </div>
-  
-  <div id="answers"></div>
+  <div class="container">
+    <div class="controls">
+      <button id="recordButton">Record</button>
+    </div>
+    
+    <div class="transcription">
+      <h3>Live Transcription</h3>
+      <div id="transcriptionText"></div>
+    </div>
 
+    <div class="qa-section">
+      <input type="text" id="question" placeholder="Ask a question...">
+      <button id="askButton">Ask</button>
+      <div id="answer"></div>
+    </div>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>
