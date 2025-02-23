@@ -1,21 +1,11 @@
 {
   "manifest_version": 3,
   "name": "VocalLens-AI",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Meeting transcription and QA system",
   "permissions": ["audioCapture"],
   "host_permissions": ["http://localhost:8000/*"],
   "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "32": "icon-32.png",
-      "48": "icon-48.png",
-      "128": "icon-128.png"
-    }
-  },
-  "icons": {
-    "32": "icon-32.png",
-    "48": "icon-48.png",
-    "128": "icon-128.png"
+    "default_popup": "popup.html"
   }
 }
