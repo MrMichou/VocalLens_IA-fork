@@ -1,17 +1,21 @@
 {
-    "manifest_version": 3,
-    "name": "VocalLens AI",
-    "description": "Meeting transcription and Q&A system",
-    "version": "0.1.0",
-    "action": {
-        "default_popup": "popup.html"
-    },
-    "permissions": [
-        "activeTab",
-        "storage",
-        "audioCapture"
-    ],
-    "host_permissions": [
-        "http://localhost:5000/*"
-    ]
+  "manifest_version": 3,
+  "name": "VocalLens-AI",
+  "version": "0.5.0",
+  "description": "Meeting transcription and QA system",
+  "permissions": ["audioCapture"],
+  "host_permissions": ["http://localhost:8000/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "32": "icon-32.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    }
+  },
+  "icons": {
+    "32": "icon-32.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  }
 }

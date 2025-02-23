@@ -1,5 +1,23 @@
 version: '3.7'
 services:
+  api:
+    build: .
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
+    depends_on:
+      - qdrant
+
   qdrant:
     image: qdrant/qdrant:latest
     ports:
@@ -8,7 +26,6 @@ services:
       - qdrant_data:/qdrant/storage
     environment:
       - QDRANT_ALLOW_ANONYMOUS_READ=true
-      # Optimisation de la mémoire pour les embeddings français
       - QDRANT_PERFORMANCE_OPTIMIZED=true
     deploy:
       resources:
