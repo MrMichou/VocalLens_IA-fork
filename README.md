@@ -1,69 +1,55 @@
 # VocalLens-AI
 
-Un système de transcription de réunions et de questions/réponses utilisant Whisper en local avec support du français.
+AI-powered meeting transcription and analysis system with a Chrome extension interface.
 
-## Fonctionnalités
+## Features
 
-- Transcription audio locale avec Whisper
-- Support natif du français
-- Système de Q&A avec embeddings CamemBERT
-- Gestion automatique de la mémoire GPU
-- Stockage vectoriel avec Qdrant
+- Real-time audio transcription using Whisper
+- French language optimization with CamemBERT
+- Q&A functionality on transcribed content
+- GPU-optimized performance
+- Chrome extension for easy recording
 
-## Prérequis
+## Tech Stack
 
-- Python 3.8.1 ou supérieur
-- Poetry pour la gestion des dépendances
-- Docker et Docker Compose pour Qdrant
-- GPU recommandé (mais pas obligatoire)
-- FFmpeg installé sur le système
+- **Backend**: FastAPI, Whisper, CamemBERT
+- **Storage**: Qdrant vector database
+- **Frontend**: Chrome Extension
+- **Infrastructure**: Docker
 
-## Installation
+## Quick Start
 
-1. Cloner le dépôt :
+1. **Environment Setup**
 ```bash
-git clone <repo_url>
-cd VocalLens-AI
-```
-
-2. Installer les dépendances avec Poetry :
-```bash
+python -m venv venv
+source venv/bin/activate  # or `venv\Scripts\activate` on Windows
 poetry install
 ```
 
-3. Démarrer Qdrant :
+2. **Start Qdrant**
 ```bash
 docker-compose up -d
 ```
 
-4. Lancer l'application :
+3. **Launch API**
 ```bash
-poetry run python app.py
+poetry run uvicorn src.api.main:app --reload
 ```
 
-## Utilisation
+4. **Install Extension**
+- Open Chrome Extensions (chrome://extensions/)
+- Enable Developer Mode
+- Load unpacked extension from `/extension`
 
-### Transcription
-POST `/transcribe`
-- Input: Fichier audio (WAV)
-- Output: Transcription et métadonnées
+## API Documentation
 
-### Recherche
-POST `/query`
-- Input: Question en texte
-- Output: Résultats pertinents avec scores
+Access OpenAPI documentation at:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
 
-## Configuration
+## Requirements
 
-L'application s'adapte automatiquement à votre matériel :
-- Sélection automatique du modèle Whisper selon la mémoire GPU
-- Optimisation des ressources pour Qdrant
-- Gestion intelligente de la mémoire
-
-## Développement
-
-Consultez le CHANGELOG.md pour suivre les évolutions du projet.
-
-## Licence
-
-[Votre licence ici]
+- Python >=3.10,<3.13
+- CUDA-capable GPU (recommended)
+- Chrome Browser
+- Docker & Docker Compose
