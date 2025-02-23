@@ -7,9 +7,10 @@ logging.basicConfig(
 )
 from fastapi.middleware.cors import CORSMiddleware
 import os
-from ..models.schemas import TranscriptionResponse, QueryRequest, QueryResponse
+from ..models.schemas import TranscriptionResponse, QueryRequest, QueryResponse, TranslationRequest
 from ..services.whisper_service import WhisperService
 from ..services.qdrant_service import QdrantService
+from ..services.translation_service import TranslationService
 
 app = FastAPI(title="VocalLens-AI API")
 
@@ -25,6 +26,7 @@ app.add_middleware(
 # Services
 whisper_service = WhisperService()
 qdrant_service = QdrantService()
+translation_service = TranslationService()
 
 @app.post("/transcribe", response_model=TranscriptionResponse)
 async def transcribe(audio: UploadFile = File(...)):
@@ -49,6 +51,14 @@ async def transcribe(audio: UploadFile = File(...)):
         }
         await qdrant_service.add_transcript(result["transcript"], metadata)
         
+        # Add translation if needed
+        if result["detected_language"] == "fr":
+            result["translation"] = await translation_service.translate(
+                result["transcript"],
+                "fr",
+                "en"
+            )
+        
         return result
         
     finally:
@@ -62,3 +72,16 @@ async def query(request: QueryRequest):
     
     results = await qdrant_service.search(request.question)
     return {"results": results}
+
+@app.post("/translate")
+async def translate(request: TranslationRequest):
+    if not request.text:
+        raise HTTPException(status_code=400, detail="No text provided")
+    
+    return {
+        "translation": await translation_service.translate(
+            request.text,
+            request.source_lang,
+            request.target_lang
+        )
+    }
