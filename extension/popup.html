@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>VocalLens AI</title>
+    <style>
+        body {
+            width: 400px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        #recordButton {
+            width: 100%;
+            padding: 15px;
+            background: #4F46E5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        #recordButton.recording {
+            background: #EF4444;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #questionInput {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #askButton {
+            padding: 10px 20px;
+            background: #4F46E5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #answers {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .answer {
+            background: #f5f5f5;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .answer .score {
+            color: #666;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <button id="recordButton">Start Recording</button>
+    
+    <div class="input-group">
+        <input type="text" id="questionInput" placeholder="Ask a question about the meeting...">
+        <button id="askButton">Ask</button>
+    </div>
+
+    <div id="answers"></div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

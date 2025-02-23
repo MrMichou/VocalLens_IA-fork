@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "name": "VocalLens AI",
+    "description": "Meeting transcription and Q&A system",
+    "version": "0.1.0",
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "activeTab",
+        "storage",
+        "audioCapture"
+    ],
+    "host_permissions": [
+        "http://localhost:5000/*"
+    ]
+}

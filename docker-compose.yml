@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT_ALLOW_ANONYMOUS_READ=true
+      # Optimisation de la mémoire pour les embeddings français
+      - QDRANT_PERFORMANCE_OPTIMIZED=true
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+
+volumes:
+  qdrant_data:
