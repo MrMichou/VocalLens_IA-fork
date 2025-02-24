@@ -71,7 +71,7 @@ async def query(request: QueryRequest):
         raise HTTPException(status_code=400, detail="No question provided")
     
     results = await qdrant_service.search(request.question)
-    return {"results": results}
+    return QueryResponse(results=results)
 
 @app.post("/translate")
 async def translate(request: TranslationRequest):

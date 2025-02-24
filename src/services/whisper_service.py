@@ -1,62 +1,71 @@
 import whisper
 import torch
-import gc
 import logging
-from ..config import Settings
 
 logger = logging.getLogger(__name__)
 
-settings = Settings()
-
 class WhisperService:
     def __init__(self):
-        self.model = None
-        self.device = settings.device
-        self.model_size = self._determine_model_size()
-        self._load_model()
-
-    def _determine_model_size(self) -> str:
-        logger.info(f"Determining model size for device: {self.device}")
-        if self.device == "cuda":
-            available_memory = self._get_available_gpu_memory()
-            return "medium" if available_memory >= settings.gpu_memory_threshold else "base"
-        return "base"
-
-    def _get_available_gpu_memory(self) -> int:
+        # Select model based on available GPU memory
         if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            gc.collect()
-            return torch.cuda.get_device_properties(0).total_memory - torch.cuda.memory_allocated(0)
-        return 0
-
-    def _load_model(self):
-        logger.info(f"Loading Whisper model: {self.model_size} on {self.device}")
-        if self.device == "cuda":
-            torch.cuda.empty_cache()
-            gc.collect()
-        self.model = whisper.load_model(self.model_size, device=self.device)
-
-    async def transcribe(self, audio_path: str) -> dict:
+            gpu_mem = torch.cuda.get_device_properties(0).total_memory / (1024 ** 3)  # GB
+            logger.info(f"Available GPU memory: {gpu_mem:.2f} GB")
+            
+            if gpu_mem > 6:
+                model_name = "medium"
+            else:
+                model_name = "base"
+                
+            device = "cuda"
+        else:
+            model_name = "tiny"
+            device = "cpu"
+            
+        logger.info(f"Loading Whisper model: {model_name} on {device}")
+        self.model = whisper.load_model(model_name, device=device)
+        self.model_type = model_name
+    
+    async def transcribe(self, audio_path):
+        """
+        Transcribe audio file using Whisper.
+        
+        Args:
+            audio_path: Path to audio file
+            
+        Returns:
+            Dict with transcript, detected language, and model used
+        """
         logger.info(f"Starting transcription of {audio_path}")
+        
         try:
-            if self.device == "cuda":
-                torch.cuda.empty_cache()
-                gc.collect()
-
-            result = self.model.transcribe(
-                audio_path,
-                language="fr",
-                task="transcribe",
-                initial_prompt="Ceci est une transcription en français."
-            )
-
-            logger.info(f"Transcription completed. Detected language: {result.get('language', 'unknown')}")
-            return {
-                "transcript": result["text"],
-                "detected_language": result.get("language", "unknown"),
-                "model_used": self.model_size
+            options = {
+                "language": None,  # Auto-detect language
+                "task": "transcribe",
+                "fp16": torch.cuda.is_available()
             }
-        finally:
-            if self.device == "cuda":
-                torch.cuda.empty_cache()
-                gc.collect()
+            
+            # Special handling for small chunks
+            try:
+                result = self.model.transcribe(audio_path, **options)
+            except RuntimeError as e:
+                if "Failed to load audio" in str(e):
+                    # Return empty result for corrupted audio chunks
+                    logger.warning(f"Audio chunk too small or corrupted: {e}")
+                    return {
+                        "transcript": "",
+                        "detected_language": "unknown",
+                        "model_used": self.model_type
+                    }
+                else:
+                    raise
+                    
+            detected_lang = result.get("language", "unknown")
+            
+            return {
+                "transcript": result["text"].strip(),
+                "detected_language": detected_lang,
+                "model_used": self.model_type
+            }
+        except Exception as e:
+            logger.error(f"Transcription error: {e}")
+            raise
