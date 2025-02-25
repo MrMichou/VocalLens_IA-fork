@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vocallens-ai"
-version = "0.5.0"
+version = "0.6.2"
 description = "Meeting transcription and QA system using local Whisper with French support"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"

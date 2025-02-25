@@ -27,6 +27,9 @@ services:
     environment:
       - QDRANT_ALLOW_ANONYMOUS_READ=true
       - QDRANT_PERFORMANCE_OPTIMIZED=true
+      - QDRANT_MAX_SEGMENT_SIZE=100000
+      - QDRANT_SNAPSHOTS_INTERVAL=300
+      - QDRANT_VECTOR_SIZE=768
     deploy:
       resources:
         limits:
@@ -36,3 +39,8 @@ services:
 
 volumes:
   qdrant_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/data/qdrant

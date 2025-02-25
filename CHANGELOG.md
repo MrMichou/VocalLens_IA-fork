@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.2] - 2025-02-25
+
+### Added
+- Background processing for transcript storage
+- Memory management for translation models
+- Health check endpoint
+- Graceful service shutdown
+
+### Fixed
+- "No space left on device" Qdrant error with improved storage management
+- Translation service memory leaks and CUDA OOM errors
+- Chrome extension button responsiveness issues
+- Improved error handling throughout the application
+
+### Changed
+- Optimized Qdrant configuration for better resource usage
+- Enhanced translation service with smart batching and fallbacks
+- Improved Docker volume configuration
+- Added visual feedback for UI interactions
+
 ## [0.6.1] - 2025-02-23
 
 ### Added
